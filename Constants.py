@@ -1,5 +1,9 @@
 # to define constants relevant to the calibration analysis
 
+# assembly properties
+npixX = 256
+npixY = 256
+
 # peak energies in keV
 FePeakE = 5.899
 Co1PeakE = 6.4
