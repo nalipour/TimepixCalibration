@@ -12,9 +12,6 @@ from optparse import OptionParser
 import Constants as C
 import getpass
 
-known_assemblies = ["A06-W0110","B06-W0125","B07-W0125","C04-W0110","D09-W0126","L04-W0125"]
-known_sources = ["Fe","Co","Cd","CuIn","Am"]
-
 parser = OptionParser()
 parser.add_option("-b", "--assembly",
                   help="Assembly name", dest="ASSEMBLY")
@@ -28,26 +25,26 @@ if(options.ASSEMBLY):
     assembly=options.ASSEMBLY
 else :
     print "Please specify assembly"
-    print "choose from", known_assemblies
+    print "choose from", C.known_assemblies
     parser.print_help()
     exit()
 
-if assembly not in known_assemblies:
+if assembly not in C.known_assemblies:
     print "Assembly not recognised"
-    print "choose from", known_assemblies
+    print "choose from", C.known_assemblies
     exit()
 
 if(options.SOURCE):
     source=options.SOURCE
 else :
     print "Please specify source"
-    print "choose from", known_sources
+    print "choose from", C.known_sources
     parser.print_help()
     exit()
 
-if source not in known_sources:
+if source not in C.known_sources:
     print "Source not recognised"
-    print "choose from", known_sources
+    print "choose from", C.known_sources
     exit()
 
 # import CLICdp ROOT style

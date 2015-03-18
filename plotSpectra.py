@@ -8,8 +8,7 @@
 import ROOT as R
 from optparse import OptionParser
 from os import environ
-
-known_assemblies = ["A06-W0110","B06-W0125","B07-W0125","C04-W0110","D09-W0126","L04-W0125"]
+import Constants as C
 
 parser = OptionParser()
 parser.add_option("-b", "--assembly",
@@ -21,13 +20,13 @@ if(options.ASSEMBLY):
     assembly=options.ASSEMBLY
 else :
     print "Please specify assembly"
-    print "choose from", known_assemblies
+    print "choose from", C.known_assemblies
     parser.print_help()
     exit()
 
-if assembly not in known_assemblies:
+if assembly not in C.known_assemblies:
     print "Assembly not recognised"
-    print "choose from", known_assemblies
+    print "choose from", C.known_assemblies
     exit()
 
 # import CLICdp ROOT style
