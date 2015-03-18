@@ -173,14 +173,14 @@ def getLimits(assembly,peak):
         if peak == "Cu": limits = [0,500]
         if peak == "In": limits = [500,1000]
         if peak == "Co1": limits = [0,300]
-        if peak == "Co2": limits = [300,700]
+        if peak == "Co2": limits = [350,700]
 
     if assembly == "B06-W0125":
         if peak == "Fe": limits = [0,700]
         if peak == "Am3": limits = [1800,2800]
         if peak == "Am2": limits = [900,1800]
         if peak == "Cd": limits = [800,1700]
-        if peak == "Cu": limits = [0,800]
+        if peak == "Cu": limits = [0,700]
         if peak == "In": limits = [800,1700]
         if peak == "Co1": limits = [0,600]
         if peak == "Co2": limits = [600,1100]
@@ -190,10 +190,10 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [900,1500]
         if peak == "Am2": limits = [550,1000]
         if peak == "Cd": limits = [500,900]
-        if peak == "Cu": limits = [0,500]
+        if peak == "Cu": limits = [0,400]
         if peak == "In": limits = [400,1000]
         if peak == "Co1": limits = [0,400]
-        if peak == "Co2": limits = [300,600]
+        if peak == "Co2": limits = [350,600]
 
     if assembly == "C04-W0110":
         if peak == "Fe": limits = [0,500]
