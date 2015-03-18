@@ -42,14 +42,15 @@ def fitGlobalSurrogate(assembly):
     # threshold
     fTh = open('results/testpulse/global_threshold_%s.txt' %assembly,'r')
     # 8 peaks
-    fFe = open('results/kde/global_results_%s_Fe.txt' %assembly,'r')
-    fAm2 = open('results/kde/global_results_%s_Am2.txt' %assembly,'r')
-    fAm3 = open('results/kde/global_results_%s_Am3.txt' %assembly,'r')
-    fCu = open('results/kde/global_results_%s_Cu.txt' %assembly,'r')
-    fIn = open('results/kde/global_results_%s_In.txt' %assembly,'r')
-    fCo1 = open('results/kde/global_results_%s_Co1.txt' %assembly,'r')
-    fCo2 = open('results/kde/global_results_%s_Co2.txt' %assembly,'r')
-    fCd = open('results/kde/global_results_%s_Cd.txt' %assembly,'r')
+    fFe = open('results/kde/%s_Fe_GlobalResults.txt' %assembly,'r')
+    fAm2 = open('results/kde/%s_Am2_GlobalResults.txt' %assembly,'r')
+    fAm3 = open('results/kde/%s_Am3_GlobalResults.txt' %assembly,'r')
+    fCu = open('results/kde/%s_Cu_GlobalResults.txt' %assembly,'r')
+    fIn = open('results/kde/%s_In_GlobalResults.txt' %assembly,'r')
+    fCo1 = open('results/kde/%s_Co1_GlobalResults.txt' %assembly,'r')
+    fCo2 = open('results/kde/%s_Co2_GlobalResults.txt' %assembly,'r')
+    fCd = open('results/kde/%s_Cd_GlobalResults.txt' %assembly,'r')
+
 
     Thline = fTh.readline().split()
     Feline = fFe.readline().split()
