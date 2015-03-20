@@ -1,11 +1,6 @@
 # will use kde method to finding most likely TOT
 # for the global calibration
 
-# to mount eos for data:
-# export EOS_MGM_URL="root://eospublic.cern.ch"
-# source /afs/cern.ch/project/eos/installation/client/etc/setup.sh
-# eosmount $HOME/eos
-
 from optparse import OptionParser
 from scipy.stats import gaussian_kde
 import numpy as np

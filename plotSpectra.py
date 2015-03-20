@@ -1,10 +1,5 @@
 # file to plot superimposed spectra of the calibration data
 
-# to mount eos for data:
-# export EOS_MGM_URL="root://eospublic.cern.ch"
-# source /afs/cern.ch/project/eos/installation/client/etc/setup.sh
-# eosmount $HOME/eos
-
 import ROOT as R
 from optparse import OptionParser
 from os import environ
