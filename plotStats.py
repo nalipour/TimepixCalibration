@@ -47,7 +47,7 @@ R.gROOT.ProcessLine(".L CLICdpStyle.C")
 R.CLICdpStyle()
 
 # extra style
-
+R.gStyle.SetOptStat(1100)
 
 def plotStats(assembly,source):
 
@@ -96,6 +96,7 @@ def plotStats(assembly,source):
 
     c = R.TCanvas()
     c.SetRightMargin(0.2)
+    statmap.SetStats(0)
     statmap.GetXaxis().SetTitle("Pixel X")
     statmap.GetYaxis().SetTitle("Pixel Y")
     statmap.Draw("colz")
@@ -105,6 +106,12 @@ def plotStats(assembly,source):
     c.SetRightMargin(0.1)
     stathist.GetXaxis().SetTitle("Hits per pixel")
     stathist.Draw()
+    c.Update()
+    stats = stathist.GetListOfFunctions().FindObject("stats")
+    stats.SetX1NDC(0.6)
+    stats.SetX2NDC(0.86)
+    stats.SetY1NDC(0.75)
+    stats.SetY2NDC(0.88)
     c.SaveAs("plots/Statistics/%s_%s_StatHist.pdf" %(assembly,source)) 
 
 
