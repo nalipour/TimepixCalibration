@@ -1,10 +1,5 @@
 # a file to plot the available statistics per pixel, per source, per assembly
 
-# to mount eos for data:
-# export EOS_MGM_URL="root://eospublic.cern.ch"
-# source /afs/cern.ch/project/eos/installation/client/etc/setup.sh
-# eosmount $HOME/eos
-
 import ROOT as R
 import time
 from os import environ
