@@ -75,8 +75,8 @@ def fitGlobalSurrogate(assembly):
     for line, energy in zip([Feline,Am2line,Am3line,Culine,Inline,Co1line,Co2line,Cdline],
                             [C.FePeakE,C.Am2PeakE,C.Am3PeakE,C.CuPeakE,C.InPeakE,C.Co1PeakE,C.Co2PeakE,C.CdPeakE]):
         tots.append(line[0])
-        tot_lerrs.append(line[1])
-        tot_uerrs.append(line[2])
+        tot_lerrs.append(R.sqrt(line[1]**2 + line[3]**2))
+        tot_uerrs.append(R.sqrt(line[2]**2 + line[3]**2))
 
         energies.append(energy)
         energy_lerrs.append(0.)
