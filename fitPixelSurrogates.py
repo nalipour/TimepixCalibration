@@ -42,14 +42,14 @@ R.gROOT.SetBatch(True)
 def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
 
     # 8 peaks
-    fFe = open('results/kde/results_%s_Fe.txt' %assembly,'r')
-    fAm2 = open('results/kde/results_%s_Am2.txt' %assembly,'r')
-    fAm3 = open('results/kde/results_%s_Am3.txt' %assembly,'r')
-    fCu = open('results/kde/results_%s_Cu.txt' %assembly,'r')
-    fIn = open('results/kde/results_%s_In.txt' %assembly,'r')
-    fCo1 = open('results/kde/results_%s_Co1.txt' %assembly,'r')
-    fCo2 = open('results/kde/results_%s_Co2.txt' %assembly,'r')
-    fCd = open('results/kde/results_%s_Cd.txt' %assembly,'r')
+    fFe = open('results/kde/%s_Fe_PixelResults.txt' %assembly,'r')
+    fAm2 = open('results/kde/%s_Am2_PixelResults.txt' %assembly,'r')
+    fAm3 = open('results/kde/%s_Am3_PixelResults.txt' %assembly,'r')
+    fCu = open('results/kde/%s_Cu_PixelResults.txt' %assembly,'r')
+    fIn = open('results/kde/%s_In_PixelResults.txt' %assembly,'r')
+    fCo1 = open('results/kde/%s_Co1_PixelResults.txt' %assembly,'r')
+    fCo2 = open('results/kde/%s_Co2_PixelResults.txt' %assembly,'r')
+    fCd = open('results/kde/%s_Cd_PixelResults.txt' %assembly,'r')
 
     chi2ndf2d = []
     a2d = []

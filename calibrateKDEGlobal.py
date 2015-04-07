@@ -89,6 +89,7 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
     print "copied tree"
 
     x_grid = np.linspace(llim, ulim, 100)
+    step_size = (ulim-llim)/99.
     ent = t2.GetEntries()
     print "Will load", ent, "entries"
     tot = []
@@ -138,7 +139,7 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
     ax.tick_params(axis='x', pad=20)
     plt.xticks(np.arange(llim,ulim+1,(ulim-llim)/5.))
     ax.set_xlabel('TOT (ADC)')
-    ax.text(0.01, 0.99, r'Max: $%i \pm ^{%0.2f} _{%0.2f}$' %(maxtot,uppersigma,lowersigma),
+    ax.text(0.01, 0.99, r'Max: $%i \pm ^{%0.2f} _{%0.2f} \pm %0.2f$' %(maxtot,uppersigma,lowersigma,step_size/2.),
             verticalalignment='top', horizontalalignment='left',
             transform=ax.transAxes,
             fontsize=40)
@@ -149,11 +150,11 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
     fig.tight_layout()
     fig.savefig("plots/KDEPeaks/%s_%s_GlobalSpectrum.pdf" %(assembly,peak))
 
-    print "assembly", assembly, "maxtot", maxtot, "pm", uppersigma, lowersigma
+    print "assembly", assembly, "maxtot", maxtot, "pm", uppersigma, lowersigma, "pm", step_size/2.
 
     # txt file
     f = open('results/kde/%s_%s_GlobalResults.txt' %(assembly,peak), 'w')
-    f.write('%f \t %f \t %f \n' %(maxtot,lowersigma,uppersigma))
+    f.write('%f \t %f \t %f \t %f \n' %(maxtot,lowersigma,uppersigma,step_size/2.))
     f.close()
     print "finished", assembly, peak
 
