@@ -109,14 +109,14 @@ def plotSpectra(assembly,topTOT):
     leg_allp = R.TLegend(0.7,0.5,0.94,0.89)
     leg_allp.AddEntry(histFe_allp,"Fe: %i evt" %histFe_allp.GetEntries(),"l")
     leg_allp.AddEntry(histCo_allp,"Co: %i evt" %histCo_allp.GetEntries(),"l")
-    leg_allp.AddEntry(histCuIn_allp,"CuIn: %i evt" %histCuIn_allp.GetEntries(),"l")
+    leg_allp.AddEntry(histCuIn_allp,"CuInXRF: %i evt" %histCuIn_allp.GetEntries(),"l")
     leg_allp.AddEntry(histCd_allp,"Cd: %i evt" %histCd_allp.GetEntries(),"l")
     leg_allp.AddEntry(histAm_allp,"Am: %i evt" %histAm_allp.GetEntries(),"l")
 
     leg_onep = R.TLegend(0.7,0.5,0.94,0.89)
     leg_onep.AddEntry(histFe_onep,"Fe: %i evt" %histFe_onep.GetEntries(),"l")
     leg_onep.AddEntry(histCo_onep,"Co: %i evt" %histCo_onep.GetEntries(),"l")
-    leg_onep.AddEntry(histCuIn_onep,"CuIn: %i evt" %histCuIn_onep.GetEntries(),"l")
+    leg_onep.AddEntry(histCuIn_onep,"CuInXRF: %i evt" %histCuIn_onep.GetEntries(),"l")
     leg_onep.AddEntry(histCd_onep,"Cd: %i evt" %histCd_onep.GetEntries(),"l")
     leg_onep.AddEntry(histAm_onep,"Am: %i evt" %histAm_onep.GetEntries(),"l")
     
@@ -138,6 +138,144 @@ def plotSpectra(assembly,topTOT):
     c.Update()
     c.SaveAs("plots/Spectra/%s_Spectra_OnePixel.pdf" %assembly)
 
+    # if A06-W0110, plot additional spectra of LNLS data
+    if (assembly == "A06-W0110"):
+        print "Assembly A06-W0110 has additional data from LNLS, plotting that now"
+
+        # get data
+        base = "%s/eos/clicdp/data/VertexCalibration/LNLS_Analysis/SinglePixelAnalysis/root_files" %home
+        topTOT = 500
+
+        rootfileCoXRF = R.TFile("%s/A06-W0110-25V_CoXRF_CalibTree.root" %base)
+        rootfileCrXRF = R.TFile("%s/A06-W0110-25V_CrXRF_CalibTree.root" %base)
+        rootfileCuXRF = R.TFile("%s/A06-W0110-25V_CuXRF_CalibTree.root" %base)
+        rootfileFeXRF = R.TFile("%s/A06-W0110-25V_FeXRF_CalibTree.root" %base)
+        rootfileMnXRF = R.TFile("%s/A06-W0110-25V_MnXRF_CalibTree.root" %base)
+        rootfileNiXRF = R.TFile("%s/A06-W0110-25V_NiXRF_CalibTree.root" %base)
+        rootfileTiXRF = R.TFile("%s/A06-W0110-25V_TiXRF_CalibTree.root" %base)
+        rootfileVXRF = R.TFile("%s/A06-W0110-25V_VXRF_CalibTree.root" %base)
+
+        # trees
+        treeCoXRF = rootfileCoXRF.Get("pixels")
+        treeCrXRF = rootfileCrXRF.Get("pixels")
+        treeCuXRF = rootfileCuXRF.Get("pixels")
+        treeFeXRF = rootfileFeXRF.Get("pixels")
+        treeMnXRF = rootfileMnXRF.Get("pixels")
+        treeNiXRF = rootfileNiXRF.Get("pixels")
+        treeTiXRF = rootfileTiXRF.Get("pixels")
+        treeVXRF = rootfileVXRF.Get("pixels")
+        print "got trees"
+
+        # hists
+        histCoXRF_allp = R.TH1F("histCoXRF_allp","",100,0,topTOT)
+        histCrXRF_allp = R.TH1F("histCrXRF_allp","",100,0,topTOT)
+        histCuXRF_allp = R.TH1F("histCuXRF_allp","",100,0,topTOT)
+        histFeXRF_allp = R.TH1F("histFeXRF_allp","",100,0,topTOT)
+        histMnXRF_allp = R.TH1F("histMnXRF_allp","",100,0,topTOT)
+        histNiXRF_allp = R.TH1F("histNiXRF_allp","",100,0,topTOT)
+        histTiXRF_allp = R.TH1F("histTiXRF_allp","",100,0,topTOT)
+        histVXRF_allp = R.TH1F("histVXRF_allp","",100,0,topTOT)
+        
+        histCoXRF_onep = R.TH1F("histCoXRF_onep","",20,0,topTOT)
+        histCrXRF_onep = R.TH1F("histCrXRF_onep","",20,0,topTOT)
+        histCuXRF_onep = R.TH1F("histCuXRF_onep","",20,0,topTOT)
+        histFeXRF_onep = R.TH1F("histFeXRF_onep","",20,0,topTOT)
+        histMnXRF_onep = R.TH1F("histMnXRF_onep","",20,0,topTOT)
+        histNiXRF_onep = R.TH1F("histNiXRF_onep","",20,0,topTOT)
+        histTiXRF_onep = R.TH1F("histTiXRF_onep","",20,0,topTOT)
+        histVXRF_onep = R.TH1F("histVXRF_onep","",20,0,topTOT)
+
+        treeCoXRF.Draw("tot>>histCoXRF_allp","","goff") 
+        treeCrXRF.Draw("tot>>histCrXRF_allp","","goff") 
+        treeCuXRF.Draw("tot>>histCuXRF_allp","","goff") 
+        treeFeXRF.Draw("tot>>histFeXRF_allp","","goff") 
+        treeMnXRF.Draw("tot>>histMnXRF_allp","","goff") 
+        treeNiXRF.Draw("tot>>histNiXRF_allp","","goff") 
+        treeTiXRF.Draw("tot>>histTiXRF_allp","","goff") 
+        treeVXRF.Draw("tot>>histVXRF_allp","","goff") 
+        print "drawn histograms with all pixels"
+
+        treeCoXRF.Draw("tot>>histCoXRF_onep","col==128&&row==128","goff") 
+        treeCrXRF.Draw("tot>>histCrXRF_onep","col==128&&row==128","goff") 
+        treeCuXRF.Draw("tot>>histCuXRF_onep","col==128&&row==128","goff") 
+        treeFeXRF.Draw("tot>>histFeXRF_onep","col==128&&row==128","goff") 
+        treeMnXRF.Draw("tot>>histMnXRF_onep","col==128&&row==128","goff") 
+        treeNiXRF.Draw("tot>>histNiXRF_onep","col==128&&row==128","goff") 
+        treeTiXRF.Draw("tot>>histTiXRF_onep","col==128&&row==128","goff") 
+        treeVXRF.Draw("tot>>histVXRF_onep","col==128&&row==128","goff") 
+        print "drawn histograms with one pixel"
+
+        for hist in [histCoXRF_allp,histCrXRF_allp,histCuXRF_allp,histFeXRF_allp,histMnXRF_allp,
+                     histNiXRF_allp,histTiXRF_allp,histVXRF_allp,histCoXRF_onep,histCrXRF_onep,
+                     histCuXRF_onep,histFeXRF_onep,histMnXRF_onep,histNiXRF_onep,histTiXRF_onep,histVXRF_onep]:
+            hist.Scale(1./hist.GetMaximum())
+
+        for hist in [histCuXRF_allp,histCuXRF_onep]:
+            hist.GetXaxis().SetTitle("TOT (ADC counts)")
+            hist.GetYaxis().SetTitle("A.U.")
+            hist.GetYaxis().SetTitleOffset(0.5)
+
+        histCoXRF_allp.SetLineColor(R.kBlue)
+        histCrXRF_allp.SetLineColor(R.kGreen+2)
+        histCuXRF_allp.SetLineColor(R.kRed+2)
+        histFeXRF_allp.SetLineColor(R.kOrange)
+        histMnXRF_allp.SetLineColor(R.kCyan+1)
+        histNiXRF_allp.SetLineColor(R.kViolet)
+        histTiXRF_allp.SetLineColor(R.kGray)
+        histVXRF_allp.SetLineColor(R.kBlack)
+
+        histCoXRF_onep.SetLineColor(R.kBlue)
+        histCrXRF_onep.SetLineColor(R.kGreen+2)
+        histCuXRF_onep.SetLineColor(R.kRed+2)
+        histFeXRF_onep.SetLineColor(R.kOrange)
+        histMnXRF_onep.SetLineColor(R.kCyan+1)
+        histNiXRF_onep.SetLineColor(R.kViolet)
+        histTiXRF_onep.SetLineColor(R.kGray)
+        histVXRF_onep.SetLineColor(R.kBlack)
+
+        leg_allp = R.TLegend(0.7,0.3,0.94,0.89)
+        leg_allp.AddEntry(histCoXRF_allp,"CoXRF: %i evt" %histCoXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histCrXRF_allp,"CrXRF: %i evt" %histCrXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histCuXRF_allp,"CuXRF: %i evt" %histCuXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histFeXRF_allp,"FeXRF: %i evt" %histFeXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histMnXRF_allp,"MnXRF: %i evt" %histMnXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histNiXRF_allp,"NiXRF: %i evt" %histNiXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histTiXRF_allp,"TiXRF: %i evt" %histTiXRF_allp.GetEntries(),"l")
+        leg_allp.AddEntry(histVXRF_allp,"VXRF: %i evt" %histVXRF_allp.GetEntries(),"l")
+
+        leg_onep = R.TLegend(0.7,0.3,0.94,0.89)
+        leg_onep.AddEntry(histCoXRF_onep,"CoXRF: %i evt" %histCoXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histCrXRF_onep,"CrXRF: %i evt" %histCrXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histCuXRF_onep,"CuXRF: %i evt" %histCuXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histFeXRF_onep,"FeXRF: %i evt" %histFeXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histMnXRF_onep,"MnXRF: %i evt" %histMnXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histNiXRF_onep,"NiXRF: %i evt" %histNiXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histTiXRF_onep,"TiXRF: %i evt" %histTiXRF_onep.GetEntries(),"l")
+        leg_onep.AddEntry(histVXRF_onep,"VXRF: %i evt" %histVXRF_onep.GetEntries(),"l")
+        
+        histCuXRF_allp.Draw()
+        histCrXRF_allp.Draw("same")
+        histVXRF_allp.Draw("same")
+        histFeXRF_allp.Draw("same")
+        histMnXRF_allp.Draw("same")
+        histNiXRF_allp.Draw("same")
+        histTiXRF_allp.Draw("same")
+        histCoXRF_allp.Draw("same")
+        leg_allp.Draw()
+        c.Update()
+        c.SaveAs("plots/Spectra/A06-W0110_LNLSSpectra_AllPixels.pdf")
+
+        histCuXRF_onep.Draw()
+        histCrXRF_onep.Draw("same")
+        histVXRF_onep.Draw("same")
+        histFeXRF_onep.Draw("same")
+        histMnXRF_onep.Draw("same")
+        histNiXRF_onep.Draw("same")
+        histTiXRF_onep.Draw("same")
+        histCoXRF_onep.Draw("same")
+        leg_onep.Draw()
+        c.Update()
+        c.SaveAs("plots/Spectra/A06-W0110_LNLSSpectra_OnePixel.pdf")
 
 def getTopTOT(assembly):
     
