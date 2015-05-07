@@ -37,30 +37,84 @@ R.gROOT.SetBatch(True)
 
 
 def fitGlobalSurrogate(assembly):
+    lines = []
+    fixed_vals = []
+
     # threshold
     fTh = open('results/testpulse/global_threshold_%s.txt' %assembly,'r')
+    Thline = fTh.readline().split()
+    lines.append(Thline)
+    fixed_vals.append(0.)
+
     # 8 peaks
     fFe = open('results/kde/%s_Fe_GlobalResults.txt' %assembly,'r')
     fAm2 = open('results/kde/%s_Am2_GlobalResults.txt' %assembly,'r')
     fAm3 = open('results/kde/%s_Am3_GlobalResults.txt' %assembly,'r')
-    fCu = open('results/kde/%s_Cu_GlobalResults.txt' %assembly,'r')
-    fIn = open('results/kde/%s_In_GlobalResults.txt' %assembly,'r')
+    fCuXRF_CERN = open('results/kde/%s_CuXRF_CERN_GlobalResults.txt' %assembly,'r')
+    fInXRF = open('results/kde/%s_InXRF_GlobalResults.txt' %assembly,'r')
     fCo1 = open('results/kde/%s_Co1_GlobalResults.txt' %assembly,'r')
     fCo2 = open('results/kde/%s_Co2_GlobalResults.txt' %assembly,'r')
     fCd = open('results/kde/%s_Cd_GlobalResults.txt' %assembly,'r')
-
-
-    Thline = fTh.readline().split()
     Feline = fFe.readline().split()
     Am2line = fAm2.readline().split()
     Am3line = fAm3.readline().split()
-    Culine = fCu.readline().split()
-    Inline = fIn.readline().split()
+    CuXRF_CERNline = fCuXRF_CERN.readline().split()
+    InXRFline = fInXRF.readline().split()
     Co1line = fCo1.readline().split()
     Co2line = fCo2.readline().split()
     Cdline = fCd.readline().split()
+    lines.append(Feline)
+    fixed_vals.append(C.FePeakE)
+    lines.append(Am2line)
+    fixed_vals.append(C.Am2PeakE)
+    lines.append(Am3line)
+    fixed_vals.append(C.Am3PeakE)
+    lines.append(CuXRF_CERNline)
+    fixed_vals.append(C.CuXRFPeakE)
+    lines.append(InXRFline)
+    fixed_vals.append(C.InXRFPeakE)
+    lines.append(Co1line)
+    fixed_vals.append(C.Co1PeakE)
+    lines.append(Co2line)
+    fixed_vals.append(C.Co2PeakE)
+    lines.append(Cdline)
+    fixed_vals.append(C.CdPeakE)
 
-    for line in [Thline,Feline,Am2line,Am3line,Culine,Inline,Co1line,Co2line,Cdline]:
+    if assembly == "A06-W0110":
+        fCoXRF = open('results/kde/%s_CoXRF_GlobalResults.txt' %assembly,'r')
+        fCrXRF = open('results/kde/%s_CrXRF_GlobalResults.txt' %assembly,'r')
+        fCuXRF_LNLS = open('results/kde/%s_CuXRF_LNLS_GlobalResults.txt' %assembly,'r')
+        fFeXRF = open('results/kde/%s_FeXRF_GlobalResults.txt' %assembly,'r')
+        fMnXRF = open('results/kde/%s_MnXRF_GlobalResults.txt' %assembly,'r')
+        fNiXRF = open('results/kde/%s_NiXRF_GlobalResults.txt' %assembly,'r')
+        fTiXRF = open('results/kde/%s_TiXRF_GlobalResults.txt' %assembly,'r')
+        fVXRF = open('results/kde/%s_VXRF_GlobalResults.txt' %assembly,'r')
+        CoXRFline = fCoXRF.readline().split()
+        CrXRFline = fCrXRF.readline().split()
+        CuXRF_LNLSline = fCuXRF_LNLS.readline().split()
+        FeXRFline = fFeXRF.readline().split()
+        MnXRFline = fMnXRF.readline().split()
+        NiXRFline = fNiXRF.readline().split()
+        TiXRFline = fTiXRF.readline().split()
+        VXRFline = fVXRF.readline().split()
+        lines.append(CoXRFline)
+        fixed_vals.append(C.CoXRFPeakE)
+        lines.append(CrXRFline)
+        fixed_vals.append(C.CrXRFPeakE)
+        lines.append(CuXRF_LNLSline)
+        fixed_vals.append(C.CuXRFPeakE)
+        lines.append(FeXRFline)
+        fixed_vals.append(C.FeXRFPeakE)
+        lines.append(MnXRFline)
+        fixed_vals.append(C.MnXRFPeakE)
+        lines.append(NiXRFline)
+        fixed_vals.append(C.NiXRFPeakE)
+        lines.append(TiXRFline)
+        fixed_vals.append(C.TiXRFPeakE)
+        lines.append(VXRFline)
+        fixed_vals.append(C.VXRFPeakE)
+
+    for line in lines:
         for i in xrange(len(line)):
             line[i] = ast.literal_eval(line[i])
 
@@ -72,25 +126,24 @@ def fitGlobalSurrogate(assembly):
     energy_lerrs = array('f',[])
     energy_uerrs = array('f',[])
 
-    for line, energy in zip([Feline,Am2line,Am3line,Culine,Inline,Co1line,Co2line,Cdline],
-                            [C.FePeakE,C.Am2PeakE,C.Am3PeakE,C.CuPeakE,C.InPeakE,C.Co1PeakE,C.Co2PeakE,C.CdPeakE]):
-        tots.append(line[0])
-        tot_lerrs.append(R.sqrt(line[1]**2 + line[3]**2))
-        tot_uerrs.append(R.sqrt(line[2]**2 + line[3]**2))
+    for line, fixed_val in zip(lines,fixed_vals):
+        if line == Thline:
+            tots.append(fixed_val)
+            tot_lerrs.append(0.)
+            tot_uerrs.append(0.)
 
-        energies.append(energy)
-        energy_lerrs.append(0.)
-        energy_uerrs.append(0.)
+            energies.append(line[0])
+            energy_lerrs.append(line[1])
+            energy_uerrs.append(line[2])
 
-    for line in [Thline]:
+        else:
+            tots.append(line[0])
+            tot_lerrs.append(R.sqrt(line[1]**2 + line[3]**2))
+            tot_uerrs.append(R.sqrt(line[2]**2 + line[3]**2))
 
-        tots.append(0.)
-        tot_lerrs.append(0.)
-        tot_uerrs.append(0.)
-
-        energies.append(line[0])
-        energy_lerrs.append(line[1])
-        energy_uerrs.append(line[2])
+            energies.append(fixed_val)
+            energy_lerrs.append(0.)
+            energy_uerrs.append(0.)
 
 
     canv = R.TCanvas()
@@ -120,14 +173,14 @@ def fitGlobalSurrogate(assembly):
     gr.SetMinimum(0.)
     gr.SetMaximum(surrogate.Eval(65.0))
     canv.Update()
-    canv.SaveAs("plots/KDESurrogateFits/%s_GlobalSurrogateFit.pdf" %assembly)
+    canv.SaveAs("plots/KDESurrogateFits/%s_GlobalSurrogateFit_new.pdf" %assembly)
 
     fTh.close()
     fFe.close()
     fAm2.close()
     fAm3.close()
-    fCu.close()
-    fIn.close()
+    fCuXRF_CERN.close()
+    fInXRF.close()
     fCo1.close()
     fCo2.close()
     fCd.close()
