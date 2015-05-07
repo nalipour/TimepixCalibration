@@ -16,19 +16,19 @@ CERN_peaks = ["Fe","Co1","CuXRF_CERN","Co2","Cd","InXRF","Am2","Am3"]
 LNLS_peaks = ["CoXRF","CrXRF","CuXRF_LNLS","FeXRF","MnXRF","NiXRF","TiXRF","VXRF"]
 
 # peak energies in keV
-FePeakE = 5.899
-Co1PeakE = 6.4
-Co2PeakE = 14.4
-CdPeakE = 22.9
-Am2PeakE = 26.2
-Am3PeakE = 60.0
+FePeakE = 5.89875
+Co1PeakE = 6.40384
+Co2PeakE = 14.41295
+CdPeakE = 22.16317
+Am2PeakE = 26.3446
+Am3PeakE = 59.5412
 
-CoXRFPeakE = 6.93
-CrXRFPeakE = 5.414
-CuXRFPeakE = 8.1
-FeXRFPeakE = 6.4
-InXRFPeakE = 24.0
-MnXRFPeakE = 5.89
-NiXRFPeakE = 7.47
-TiXRFPeakE = 4.51
-VXRFPeakE = 4.95
+CoXRFPeakE = 6.93032
+CrXRFPeakE = 5.41472
+CuXRFPeakE = 8.04778
+FeXRFPeakE = 6.40384
+InXRFPeakE = 24.2097
+MnXRFPeakE = 5.89875
+NiXRFPeakE = 7.47815
+TiXRFPeakE = 4.51084
+VXRFPeakE = 4.95220
