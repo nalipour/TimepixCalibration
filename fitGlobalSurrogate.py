@@ -39,14 +39,16 @@ R.gROOT.SetBatch(True)
 def fitGlobalSurrogate(assembly):
     lines = []
     fixed_vals = []
+    Thline = 0
 
-    # threshold
-    fTh = open('results/testpulse/global_threshold_%s.txt' %assembly,'r')
-    Thline = fTh.readline().split()
-    lines.append(Thline)
-    fixed_vals.append(0.)
+    # thresholds
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110":
+        fTh = open('results/threshold/%s_GlobalThreshold.txt' %assembly,'r')
+        Thline = fTh.readline().split()
+        lines.append(Thline)
+        fixed_vals.append(0.)
 
-    # 8 peaks
+    # CERN data
     fFe = open('results/kde/%s_Fe_GlobalResults.txt' %assembly,'r')
     fAm2 = open('results/kde/%s_Am2_GlobalResults.txt' %assembly,'r')
     fAm3 = open('results/kde/%s_Am3_GlobalResults.txt' %assembly,'r')
@@ -80,6 +82,7 @@ def fitGlobalSurrogate(assembly):
     lines.append(Cdline)
     fixed_vals.append(C.CdPeakE)
 
+    # LNLS data
     if assembly == "A06-W0110":
         fCoXRF = open('results/kde/%s_CoXRF_GlobalResults.txt' %assembly,'r')
         fCrXRF = open('results/kde/%s_CrXRF_GlobalResults.txt' %assembly,'r')
@@ -131,7 +134,7 @@ def fitGlobalSurrogate(assembly):
             tots.append(fixed_val)
             tot_lerrs.append(0.)
             tot_uerrs.append(0.)
-
+            
             energies.append(line[0])
             energy_lerrs.append(line[1])
             energy_uerrs.append(line[2])
@@ -173,9 +176,10 @@ def fitGlobalSurrogate(assembly):
     gr.SetMinimum(0.)
     gr.SetMaximum(surrogate.Eval(65.0))
     canv.Update()
-    canv.SaveAs("plots/KDESurrogateFits/%s_GlobalSurrogateFit_new.pdf" %assembly)
+    canv.SaveAs("plots/KDESurrogateFits/Global/%s_GlobalSurrogateFit.pdf" %assembly)
 
-    fTh.close()
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110":
+        fTh.close()
     fFe.close()
     fAm2.close()
     fAm3.close()
@@ -184,7 +188,15 @@ def fitGlobalSurrogate(assembly):
     fCo1.close()
     fCo2.close()
     fCd.close()
-
+    if assembly == "A06-W0110":
+        fCoXRF.close()
+        fCrXRF.close()
+        fCuXRF_LNLS.close()
+        fFeXRF.close()
+        fMnXRF.close()
+        fNiXRF.close()
+        fTiXRF.close()
+        fVXRF.close()
 
 
 fitGlobalSurrogate(assembly)
