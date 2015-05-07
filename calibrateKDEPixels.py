@@ -244,14 +244,14 @@ def getLimits(assembly,peak):
         if peak == "InXRF": limits = [500,1000]
         if peak == "Co1": limits = [0,300]
         if peak == "Co2": limits = [350,700]
-        if peak == "CoXRF": limits = [0,400] #
-        if peak == "CrXRF": limits = [0,400] #
-        if peak == "CuXRF_LNLS": limits = [0,400] #ok
-        if peak == "FeXRF": limits = [0,400] #
-        if peak == "MnXRF": limits = [0,400] #
-        if peak == "NiXRF": limits = [0,400] #
-        if peak == "TiXRF": limits = [0,200] #
-        if peak == "VXRF": limits = [0,400] #
+        if peak == "CoXRF": limits = [0,400]
+        if peak == "CrXRF": limits = [0,400]
+        if peak == "CuXRF_LNLS": limits = [0,400]
+        if peak == "FeXRF": limits = [0,400]
+        if peak == "MnXRF": limits = [0,400]
+        if peak == "NiXRF": limits = [0,400]
+        if peak == "TiXRF": limits = [0,200]
+        if peak == "VXRF": limits = [0,400]
 
     if assembly == "B06-W0125":
         if peak == "Fe": limits = [0,700]
