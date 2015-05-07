@@ -47,6 +47,10 @@ if peak not in C.known_peaks:
     print "choose from", C.known_peaks
     exit()
 
+if peak in C.LNLS_peaks and assembly != "A06-W0110":
+    print "Peak only available for assembly A06-W0110"
+    print "please reconsider input"
+    exit()
 
 def kde_scipy(x, x_grid, bandwidth=0.2, **kwargs):
     """Kernel Density Estimation with Scipy"""
@@ -70,7 +74,7 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
         rootfile = R.TFile("%s/%s/%s_SinglePixelCalibration/Am241_%s_spc.root"%(base,assembly,assembly_start,assembly))
     elif peak == "Cd":
         rootfile = R.TFile("%s/%s/%s_SinglePixelCalibration/Cd109_%s_spc.root"%(base,assembly,assembly_start,assembly))
-    elif peak == "Cu" or peak == "In":
+    elif peak == "CuXRF_CERN" or peak == "InXRF":
         if assembly == "B06-W0125":
             rootfile = R.TFile("%s/%s/%s_SinglePixelCalibration/Cu_In_%s_spc.root"%(base,assembly,assembly_start,assembly))
         else:
@@ -80,12 +84,28 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
             rootfile = R.TFile("%s/%s/%s_SinglePixelCalibration/Co57_%s_spc.root"%(base,assembly,assembly_start,assembly))
         else:
             rootfile = R.TFile("%s/%s/Co57_%s.root" %(base,assembly,assembly))
+    elif peak == "CoXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_CoXRF_CalibTree.root" %(base,assembly))
+    elif peak == "CrXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_CrXRF_CalibTree.root" %(base,assembly))
+    elif peak == "CuXRF_LNLS":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_CuXRF_CalibTree.root" %(base,assembly))
+    elif peak == "FeXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_FeXRF_CalibTree.root" %(base,assembly))
+    elif peak == "MnXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_MnXRF_CalibTree.root" %(base,assembly))
+    elif peak == "NiXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_NiXRF_CalibTree.root" %(base,assembly))
+    elif peak == "TiXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_TiXRF_CalibTree.root" %(base,assembly))
+    elif peak == "VXRF":
+        rootfile = R.TFile("%s/LNLS_Analysis/SinglePixelAnalysis/root_files/%s-25V_VXRF_CalibTree.root" %(base,assembly))
 
     tree = rootfile.Get("pixels")
     print "got tree"
 
     x_grid = np.linspace(llim, ulim, 100)
-
+    step_size = (ulim-llim)/99.
     mostlike2d = []
     lowersigmas = []
     uppersigmas = []
@@ -162,7 +182,7 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
                 ax.tick_params(axis='x', pad=20)
                 plt.xticks(np.arange(llim,ulim+1,(ulim-llim)/5.))
                 ax.set_xlabel('TOT (ADC)')
-                ax.text(0.01, 0.99, r'Max: $%i \pm ^{%i} _{%i}$' %(maxtot,int(uppersigma),int(lowersigma)),
+                ax.text(0.01, 0.99, r'Max: $%i \pm ^{%i} _{%i} \pm %i$' %(maxtot,int(uppersigma),int(lowersigma),int(step_size/2.)),
                         verticalalignment='top', horizontalalignment='left',
                         transform=ax.transAxes,
                         fontsize=40)
@@ -193,7 +213,7 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
     f = open('results/kde/%s_%s_PixelResults.txt' %(assembly,peak), 'w')
     for i in xrange(C.npixX):
         for j in xrange(C.npixY):
-            f.write('%f \t %f \t %f \t %f \t %f \n' %(x[i][j],y[i][j],mostlike2d[i][j],lowersigmas[i][j],uppersigmas[i][j]))
+            f.write('%f \t %f \t %f \t %f \t %f \t %f \n' %(x[i][j],y[i][j],mostlike2d[i][j],lowersigmas[i][j],uppersigmas[i][j],step_size/2.))
 
     f.close()
 
@@ -220,18 +240,26 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [900,1500]
         if peak == "Am2": limits = [500,900]
         if peak == "Cd": limits = [400,800]
-        if peak == "Cu": limits = [0,500]
-        if peak == "In": limits = [500,1000]
+        if peak == "CuXRF_CERN": limits = [0,500]
+        if peak == "InXRF": limits = [500,1000]
         if peak == "Co1": limits = [0,300]
         if peak == "Co2": limits = [350,700]
+        if peak == "CoXRF": limits = [0,400] #
+        if peak == "CrXRF": limits = [0,400] #
+        if peak == "CuXRF_LNLS": limits = [0,400] #ok
+        if peak == "FeXRF": limits = [0,400] #
+        if peak == "MnXRF": limits = [0,400] #
+        if peak == "NiXRF": limits = [0,400] #
+        if peak == "TiXRF": limits = [0,200] #
+        if peak == "VXRF": limits = [0,400] #
 
     if assembly == "B06-W0125":
         if peak == "Fe": limits = [0,700]
         if peak == "Am3": limits = [1800,2800]
         if peak == "Am2": limits = [900,1800]
         if peak == "Cd": limits = [800,1700]
-        if peak == "Cu": limits = [0,700]
-        if peak == "In": limits = [800,1700]
+        if peak == "CuXRF_CERN": limits = [0,700]
+        if peak == "InXRF": limits = [800,1700]
         if peak == "Co1": limits = [0,600]
         if peak == "Co2": limits = [600,1100]
 
@@ -240,8 +268,8 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [900,1500]
         if peak == "Am2": limits = [550,1000]
         if peak == "Cd": limits = [500,900]
-        if peak == "Cu": limits = [0,400]
-        if peak == "In": limits = [400,1000]
+        if peak == "CuXRF_CERN": limits = [0,400]
+        if peak == "InXRF": limits = [400,1000]
         if peak == "Co1": limits = [0,400]
         if peak == "Co2": limits = [350,600]
 
@@ -250,8 +278,8 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [900,1400]
         if peak == "Am2": limits = [500,900]
         if peak == "Cd": limits = [400,800]
-        if peak == "Cu": limits = [0,500]
-        if peak == "In": limits = [500,700]
+        if peak == "CuXRF_CERN": limits = [0,500]
+        if peak == "InXRF": limits = [500,700]
         if peak == "Co1": limits = [0,400]
         if peak == "Co2": limits = [350,600]
 
@@ -260,8 +288,8 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [1200,1800]
         if peak == "Am2": limits = [600,1200]
         if peak == "Cd": limits = [600,1200]
-        if peak == "Cu": limits = [0,600]
-        if peak == "In": limits = [600,1100]
+        if peak == "CuXRF_CERN": limits = [0,600]
+        if peak == "InXRF": limits = [600,1100]
         if peak == "Co1": limits = [0,500]
         if peak == "Co2": limits = [500,800]
 
@@ -270,8 +298,8 @@ def getLimits(assembly,peak):
         if peak == "Am3": limits = [1000,2000]
         if peak == "Am2": limits = [600,1000]
         if peak == "Cd": limits = [500,1100]
-        if peak == "Cu": limits = [0,600]
-        if peak == "In": limits = [600,1200]
+        if peak == "CuXRF_CERN": limits = [0,600]
+        if peak == "InXRF": limits = [600,1200]
         if peak == "Co1": limits = [0,400]
         if peak == "Co2": limits = [400,700]
 
