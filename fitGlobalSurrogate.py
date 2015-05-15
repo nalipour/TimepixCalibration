@@ -42,7 +42,7 @@ def fitGlobalSurrogate(assembly):
     Thline = 0
 
     # thresholds
-    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110":
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110" or assembly == "L04-W0125":
         fTh = open('results/threshold/%s_GlobalThreshold.txt' %assembly,'r')
         Thline = fTh.readline().split()
         lines.append(Thline)
@@ -178,7 +178,7 @@ def fitGlobalSurrogate(assembly):
     canv.Update()
     canv.SaveAs("plots/KDESurrogateFits/Global/%s_GlobalSurrogateFit.pdf" %assembly)
 
-    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110":
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110" or assembly == "L04-W0125":
         fTh.close()
     fFe.close()
     fAm2.close()
