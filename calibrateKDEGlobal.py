@@ -137,6 +137,8 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
             density._compute_covariance()
             workaround = density(x_grid)
 
+            grad = np.gradient(workaround)
+
             maxindex = workaround.argmax()
             maxtot = x_grid[maxindex]
 
@@ -174,6 +176,15 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
         item.set_fontsize(40)
     fig.tight_layout()
     fig.savefig("plots/KDEPeaks/Global/%s_%s_GlobalSpectrum.pdf" %(assembly,peak))
+
+    fig, ax = plt.subplots(1, 1, figsize=(12, 12))
+    ax.tick_params(axis='x', pad=20)
+    ax.set_xlabel('TOT (ADC)')
+    ax.plot(x_grid, grad, color='red', alpha=0.5, lw=3)
+    for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
+        item.set_fontsize(40)
+    fig.tight_layout()
+    fig.savefig("plots/KDEPeaks/Global/%s_%s_GlobalSpectrumDeriv.pdf" %(assembly,peak))
 
     print "assembly", assembly, "maxtot", maxtot, "pm", uppersigma, lowersigma, "pm", step_size/2.
 
