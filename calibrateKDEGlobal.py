@@ -128,7 +128,12 @@ def findMostLikelyTOT(assembly,peak,llim,ulim):
         try:
             print "trying"
             density = gaussian_kde(tot)
-            density.covariance_factor = density.silverman_factor
+            if density.silverman_factor() > 0.1:
+                density.covariance_factor = density.silverman_factor
+                print "Bandwidth determined from Silverman factor:", density.silverman_factor()
+            else:
+                density.covariance_factor = lambda: 0.1
+                print "Bandwidth set at 0.1 (Silverman factor too small: %f)" %density.silverman_factor()
             density._compute_covariance()
             workaround = density(x_grid)
 
