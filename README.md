@@ -22,14 +22,14 @@ for all assemblies (b) and sources (s) you are interested in
 ##### Running the global analysis
 Do:
 ```
-python calibrateKDEGlobal.py -b A06-W0110 -p Fe
+python calibrateKDEGlobal.py -b A06-W0110 -s Fe
 python fitGlobalSurrogate.py -b A06-W0110
 ```
-for all assemblies (b) and peaks (p) you are interested in
+for all assemblies (b) and sources (s) you are interested in
 ##### Running the pixel analysis
 Do:
 ```
-python calibrateKDEPixels.py -b A06-W0110 -p Fe
+python calibrateKDEPixels.py -b A06-W0110 -s Fe
 python fitPixelSurrogates.py -b A06-W0110
 ```
-for all assemblies (b) and peaks (p) you are interested in
+for all assemblies (b) and sources (s) you are interested in

@@ -7,13 +7,9 @@ npixY = 256
 # known inputs
 known_assemblies = ["A06-W0110","B06-W0125","B07-W0125","C04-W0110","D09-W0126","L04-W0125"]
 known_sources = ["Fe","Co","Cd","CuInXRF","Am","CoXRF","CrXRF","CuXRF","FeXRF","MnXRF","NiXRF","TiXRF","VXRF"]
-known_peaks = ["Fe","Co1","CuXRF_CERN","Co2","Cd","InXRF","Am2","Am3","CoXRF","CrXRF","CuXRF_LNLS","FeXRF","MnXRF","NiXRF","TiXRF","VXRF"]
 
 CERN_sources = ["Fe","Co","Cd","CuInXRF","Am"]
 LNLS_sources = ["CoXRF","CrXRF","CuXRF","FeXRF","MnXRF","NiXRF","TiXRF","VXRF"]
-
-CERN_peaks = ["Fe","Co1","CuXRF_CERN","Co2","Cd","InXRF","Am2","Am3"]
-LNLS_peaks = ["CoXRF","CrXRF","CuXRF_LNLS","FeXRF","MnXRF","NiXRF","TiXRF","VXRF"]
 
 # peak energies in keV
 FePeakE = 5.899

@@ -48,19 +48,16 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
 
     # CERN data
     fFe = open('results/kde/%s_Fe_PixelResults.txt' %assembly,'r')
-    fAm2 = open('results/kde/%s_Am2_PixelResults.txt' %assembly,'r')
-    fAm3 = open('results/kde/%s_Am3_PixelResults.txt' %assembly,'r')
-    fCuXRF_CERN = open('results/kde/%s_Cu_PixelResults.txt' %assembly,'r')
-    fInXRF = open('results/kde/%s_In_PixelResults.txt' %assembly,'r')
-    fCo1 = open('results/kde/%s_Co1_PixelResults.txt' %assembly,'r')
-    fCo2 = open('results/kde/%s_Co2_PixelResults.txt' %assembly,'r')
+    fAm = open('results/kde/%s_Am_PixelResults.txt' %assembly,'r')
+    fCuInXRF = open('results/kde/%s_CuInXRF_PixelResults.txt' %assembly,'r')
+    fCo = open('results/kde/%s_Co_PixelResults.txt' %assembly,'r')
     fCd = open('results/kde/%s_Cd_PixelResults.txt' %assembly,'r')
 
     # LNLS data
     if assembly == "A06-W0110":
         fCoXRF = open('results/kde/%s_CoXRF_PixelResults.txt' %assembly,'r')
         fCrXRF = open('results/kde/%s_CrXRF_PixelResults.txt' %assembly,'r')
-        fCuXRF_LNLS = open('results/kde/%s_CuXRF_LNLS_PixelResults.txt' %assembly,'r')
+        fCuXRF = open('results/kde/%s_CuXRF_PixelResults.txt' %assembly,'r')
         fFeXRF = open('results/kde/%s_FeXRF_PixelResults.txt' %assembly,'r')
         fMnXRF = open('results/kde/%s_MnXRF_PixelResults.txt' %assembly,'r')
         fNiXRF = open('results/kde/%s_NiXRF_PixelResults.txt' %assembly,'r')
@@ -106,26 +103,23 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
             fixed_vals.append(0.)
 
         Feline = fFe.readline().split()
-        Am2line = fAm2.readline().split()
-        Am3line = fAm3.readline().split()
-        CuXRF_CERNline = fCuXRF_CERN.readline().split()
-        InXRFline = fInXRF.readline().split()
-        Co1line = fCo1.readline().split()
-        Co2line = fCo2.readline().split()
+        Amline = fAm.readline().split()
+        CuInXRFline = fCuInXRF.readline().split()
+        Coline = fCo.readline().split()
         Cdline = fCd.readline().split()
         lines.append(Feline)
         fixed_vals.append(C.FePeakE)
-        lines.append(Am2line)
+        lines.append([Amline[0],Amline[1],Amline[2],Amline[3],Amline[4],Amline[8]])
         fixed_vals.append(C.Am2PeakE)
-        lines.append(Am3line)
+        lines.append([Amline[0],Amline[1],Amline[5],Amline[6],Amline[7],Amline[8]])
         fixed_vals.append(C.Am3PeakE)
-        lines.append(CuXRF_CERNline)
+        lines.append([CuInXRFline[0],CuInXRFline[1],CuInXRFline[2],CuInXRFline[3],CuInXRFline[4],CuInXRFline[8]])
         fixed_vals.append(C.CuXRFPeakE)
-        lines.append(InXRFline)
+        lines.append([CuInXRFline[0],CuInXRFline[1],CuInXRFline[5],CuInXRFline[6],CuInXRFline[7],CuInXRFline[8]])
         fixed_vals.append(C.InXRFPeakE)
-        lines.append(Co1line)
+        lines.append([Coline[0],Coline[1],Coline[2],Coline[3],Coline[4],Coline[8]])
         fixed_vals.append(C.Co1PeakE)
-        lines.append(Co2line)
+        lines.append([Coline[0],Coline[1],Coline[5],Coline[6],Coline[7],Coline[8]])
         fixed_vals.append(C.Co2PeakE)
         lines.append(Cdline)
         fixed_vals.append(C.CdPeakE)
@@ -133,7 +127,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
         if assembly == "A06-W0110":
             CoXRFline = fCoXRF.readline().split()
             CrXRFline = fCrXRF.readline().split()
-            CuXRF_LNLSline = fCuXRF_LNLS.readline().split()
+            CuXRFline = fCuXRF.readline().split()
             FeXRFline = fFeXRF.readline().split()
             MnXRFline = fMnXRF.readline().split()
             NiXRFline = fNiXRF.readline().split()
@@ -143,7 +137,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
             fixed_vals.append(C.CoXRFPeakE)
             lines.append(CrXRFline)
             fixed_vals.append(C.CrXRFPeakE)
-            lines.append(CuXRF_LNLSline)
+            lines.append(CuXRFline)
             fixed_vals.append(C.CuXRFPeakE)
             lines.append(FeXRFline)
             fixed_vals.append(C.FeXRFPeakE)
@@ -157,7 +151,6 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
             fixed_vals.append(C.VXRFPeakE)
 
         for line in lines:
-            #print line
             for i in xrange(len(line)):
                 line[i] = ast.literal_eval(line[i])
 
@@ -170,7 +163,6 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
         energy_uerrs = array('f',[])
 
         for line, fixed_val in zip(lines,fixed_vals):
-            #print line
             if line[0] == float(j%C.npixX) and line[1] == float(int(j/float(C.npixY))):
                 if line == Thline:
                     tots.append(fixed_val)
@@ -237,7 +229,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
             canv.Update()
 
             if j%C.npixX == 0 and int(j/float(C.npixY)) < 10:
-                canv.SaveAs("plots/KDESurrogateFits/%s_examplefit_%i_new.pdf" %(assembly,int(j/float(C.npixY))))
+                canv.SaveAs("plots/KDESurrogateFits/%s_examplefit_%i.pdf" %(assembly,int(j/float(C.npixY))))
 
             chi2ndf2d[-1].append(surrogate.GetChisquare() / surrogate.GetNDF())
             a2d[-1].append(surrogate.GetParameter(0))
@@ -257,17 +249,14 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110" or assembly == "L04-W0125":
         fTh.close()
     fFe.close()
-    fAm2.close()
-    fAm3.close()
-    fCuXRF_CERN.close()
-    fInXRF.close()
-    fCo1.close()
-    fCo2.close()
+    fAm.close()
+    fCuInXRF.close()
+    fCo.close()
     fCd.close()
     if assembly == "A06-W0110":
         fCoXRF.close()
         fCrXRF.close()
-        fCuXRF_LNLS.close()
+        fCuXRF.close()
         fFeXRF.close()
         fMnXRF.close()
         fNiXRF.close()
@@ -290,7 +279,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     fig.tight_layout()
     limits = ax.axis()
     plt.xticks(np.arange(limits[0],limits[1]+1,(limits[1]-limits[0])/5.))
-    plt.savefig("plots/KDESurrogateFits/%s_a_hist_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_a_hist.pdf" %assembly)
 
     b1d = list(itertools.chain(*b2d))
     fig, ax = plt.subplots(1, 1, figsize=(12, 12))
@@ -302,7 +291,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     fig.tight_layout()
     limits = ax.axis()
     plt.xticks(np.arange(limits[0],limits[1]+1,(limits[1]-limits[0])/5.))
-    plt.savefig("plots/KDESurrogateFits/%s_b_hist_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_b_hist.pdf" %assembly)
 
     c1d = list(itertools.chain(*c2d))
     fig, ax = plt.subplots(1, 1, figsize=(12, 12))
@@ -314,7 +303,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     fig.tight_layout()
     limits = ax.axis()
     plt.xticks(np.arange(limits[0],limits[1]+1,(limits[1]-limits[0])/4.))
-    plt.savefig("plots/KDESurrogateFits/%s_c_hist_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_c_hist.pdf" %assembly)
 
     t1d = list(itertools.chain(*t2d))
     fig, ax = plt.subplots(1, 1, figsize=(12, 12))
@@ -326,7 +315,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     fig.tight_layout()
     limits = ax.axis()
     plt.xticks(np.arange(limits[0],limits[1]+1,(limits[1]-limits[0])/5.))
-    plt.savefig("plots/KDESurrogateFits/%s_t_hist_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_t_hist.pdf" %assembly)
 
     chi2ndf1d = list(itertools.chain(*chi2ndf2d))
     fig, ax = plt.subplots(1, 1, figsize=(12, 12))
@@ -338,7 +327,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     fig.tight_layout()
     limits = ax.axis()
     plt.xticks(np.arange(limits[0],limits[1]+1,(limits[1]-limits[0])/5.))
-    plt.savefig("plots/KDESurrogateFits/%s_chi2ndf_hist_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_chi2ndf_hist.pdf" %assembly)
 
     print "making 2D plots"
     #2D
@@ -355,7 +344,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     plt.axis([x.min(), x.max(), y.min(), y.max()])
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
         item.set_fontsize(40)
-    plt.savefig("plots/KDESurrogateFits/%s_chi2ndf_map_nz_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_chi2ndf_map_nz.pdf" %assembly)
 
     a2d = np.ma.masked_equal(a2d,0)
     fig, ax = plt.subplots(1,1,figsize=(12, 10))
@@ -367,7 +356,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     plt.axis([x.min(), x.max(), y.min(), y.max()])
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
         item.set_fontsize(40)
-    plt.savefig("plots/KDESurrogateFits/%s_a_map_nz_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_a_map_nz.pdf" %assembly)
 
     b2d = np.ma.masked_equal(b2d,0)
     fig, ax = plt.subplots(1,1,figsize=(12, 10))
@@ -379,7 +368,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     plt.axis([x.min(), x.max(), y.min(), y.max()])
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
         item.set_fontsize(40)
-    plt.savefig("plots/KDESurrogateFits/%s_b_map_nz_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_b_map_nz.pdf" %assembly)
 
     c2d = np.ma.masked_equal(c2d,0)
     fig, ax = plt.subplots(1,1,figsize=(12, 10))
@@ -391,7 +380,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     plt.axis([x.min(), x.max(), y.min(), y.max()])
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
         item.set_fontsize(40)
-    plt.savefig("plots/KDESurrogateFits/%s_c_map_nz_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_c_map_nz.pdf" %assembly)
 
     t2d = np.ma.masked_equal(t2d,0)
     fig, ax = plt.subplots(1,1,figsize=(12, 10))
@@ -403,7 +392,7 @@ def fitPixelSurrogates(assembly,parEsts,parLLims,parULims):
     plt.axis([x.min(), x.max(), y.min(), y.max()])
     for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
         item.set_fontsize(40)
-    plt.savefig("plots/KDESurrogateFits/%s_t_map_nz_new.pdf" %assembly)
+    plt.savefig("plots/KDESurrogateFits/%s_t_map_nz.pdf" %assembly)
 
 
 def getParEstLim(assembly):
