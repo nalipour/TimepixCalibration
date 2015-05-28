@@ -37,30 +37,81 @@ R.gROOT.SetBatch(True)
 
 
 def fitGlobalSurrogate(assembly):
-    # threshold
-    fTh = open('results/testpulse/global_threshold_%s.txt' %assembly,'r')
-    # 8 peaks
+    lines = []
+    fixed_vals = []
+    Thline = 0
+
+    # thresholds
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110" or assembly == "L04-W0125":
+        fTh = open('results/threshold/%s_GlobalThreshold.txt' %assembly,'r')
+        Thline = fTh.readline().split()
+        lines.append(Thline)
+        fixed_vals.append(0.)
+
+    # CERN data
     fFe = open('results/kde/%s_Fe_GlobalResults.txt' %assembly,'r')
-    fAm2 = open('results/kde/%s_Am2_GlobalResults.txt' %assembly,'r')
-    fAm3 = open('results/kde/%s_Am3_GlobalResults.txt' %assembly,'r')
-    fCu = open('results/kde/%s_Cu_GlobalResults.txt' %assembly,'r')
-    fIn = open('results/kde/%s_In_GlobalResults.txt' %assembly,'r')
-    fCo1 = open('results/kde/%s_Co1_GlobalResults.txt' %assembly,'r')
-    fCo2 = open('results/kde/%s_Co2_GlobalResults.txt' %assembly,'r')
+    fAm = open('results/kde/%s_Am_GlobalResults.txt' %assembly,'r')
+    fCuInXRF = open('results/kde/%s_CuInXRF_GlobalResults.txt' %assembly,'r')
+    fCo = open('results/kde/%s_Co_GlobalResults.txt' %assembly,'r')
     fCd = open('results/kde/%s_Cd_GlobalResults.txt' %assembly,'r')
-
-
-    Thline = fTh.readline().split()
     Feline = fFe.readline().split()
-    Am2line = fAm2.readline().split()
-    Am3line = fAm3.readline().split()
-    Culine = fCu.readline().split()
-    Inline = fIn.readline().split()
-    Co1line = fCo1.readline().split()
-    Co2line = fCo2.readline().split()
+    Amline = fAm.readline().split()
+    CuInXRFline = fCuInXRF.readline().split()
+    Coline = fCo.readline().split()
     Cdline = fCd.readline().split()
+    lines.append(Feline)
+    fixed_vals.append(C.FePeakE)
+    lines.append([Amline[3],Amline[4],Amline[5],Amline[9]])
+    fixed_vals.append(C.Am2PeakE)
+    lines.append([Amline[6],Amline[7],Amline[8],Amline[9]])
+    fixed_vals.append(C.Am3PeakE)
+    lines.append([CuInXRFline[0],CuInXRFline[1],CuInXRFline[2],CuInXRFline[6]])
+    fixed_vals.append(C.CuXRFPeakE)
+    lines.append([CuInXRFline[3],CuInXRFline[4],CuInXRFline[5],CuInXRFline[6]])
+    fixed_vals.append(C.InXRFPeakE)
+    lines.append([Coline[0],Coline[1],Coline[2],Coline[6]])
+    fixed_vals.append(C.Co1PeakE)
+    lines.append([Coline[3],Coline[4],Coline[5],Coline[6]])
+    fixed_vals.append(C.Co2PeakE)
+    lines.append(Cdline)
+    fixed_vals.append(C.CdPeakE)
 
-    for line in [Thline,Feline,Am2line,Am3line,Culine,Inline,Co1line,Co2line,Cdline]:
+    # LNLS data
+    if assembly == "A06-W0110":
+        fCoXRF = open('results/kde/%s_CoXRF_GlobalResults.txt' %assembly,'r')
+        fCrXRF = open('results/kde/%s_CrXRF_GlobalResults.txt' %assembly,'r')
+        fCuXRF = open('results/kde/%s_CuXRF_GlobalResults.txt' %assembly,'r')
+        fFeXRF = open('results/kde/%s_FeXRF_GlobalResults.txt' %assembly,'r')
+        fMnXRF = open('results/kde/%s_MnXRF_GlobalResults.txt' %assembly,'r')
+        fNiXRF = open('results/kde/%s_NiXRF_GlobalResults.txt' %assembly,'r')
+        fTiXRF = open('results/kde/%s_TiXRF_GlobalResults.txt' %assembly,'r')
+        fVXRF = open('results/kde/%s_VXRF_GlobalResults.txt' %assembly,'r')
+        CoXRFline = fCoXRF.readline().split()
+        CrXRFline = fCrXRF.readline().split()
+        CuXRFline = fCuXRF.readline().split()
+        FeXRFline = fFeXRF.readline().split()
+        MnXRFline = fMnXRF.readline().split()
+        NiXRFline = fNiXRF.readline().split()
+        TiXRFline = fTiXRF.readline().split()
+        VXRFline = fVXRF.readline().split()
+        lines.append(CoXRFline)
+        fixed_vals.append(C.CoXRFPeakE)
+        lines.append(CrXRFline)
+        fixed_vals.append(C.CrXRFPeakE)
+        lines.append(CuXRFline)
+        fixed_vals.append(C.CuXRFPeakE)
+        lines.append(FeXRFline)
+        fixed_vals.append(C.FeXRFPeakE)
+        lines.append(MnXRFline)
+        fixed_vals.append(C.MnXRFPeakE)
+        lines.append(NiXRFline)
+        fixed_vals.append(C.NiXRFPeakE)
+        lines.append(TiXRFline)
+        fixed_vals.append(C.TiXRFPeakE)
+        lines.append(VXRFline)
+        fixed_vals.append(C.VXRFPeakE)
+
+    for line in lines:
         for i in xrange(len(line)):
             line[i] = ast.literal_eval(line[i])
 
@@ -72,25 +123,24 @@ def fitGlobalSurrogate(assembly):
     energy_lerrs = array('f',[])
     energy_uerrs = array('f',[])
 
-    for line, energy in zip([Feline,Am2line,Am3line,Culine,Inline,Co1line,Co2line,Cdline],
-                            [C.FePeakE,C.Am2PeakE,C.Am3PeakE,C.CuPeakE,C.InPeakE,C.Co1PeakE,C.Co2PeakE,C.CdPeakE]):
-        tots.append(line[0])
-        tot_lerrs.append(R.sqrt(line[1]**2 + line[3]**2))
-        tot_uerrs.append(R.sqrt(line[2]**2 + line[3]**2))
+    for line, fixed_val in zip(lines,fixed_vals):
+        if line == Thline:
+            tots.append(fixed_val)
+            tot_lerrs.append(0.)
+            tot_uerrs.append(0.)
+            
+            energies.append(line[0])
+            energy_lerrs.append(line[1])
+            energy_uerrs.append(line[2])
 
-        energies.append(energy)
-        energy_lerrs.append(0.)
-        energy_uerrs.append(0.)
+        else:
+            tots.append(line[0])
+            tot_lerrs.append(R.sqrt(line[1]**2 + line[3]**2))
+            tot_uerrs.append(R.sqrt(line[2]**2 + line[3]**2))
 
-    for line in [Thline]:
-
-        tots.append(0.)
-        tot_lerrs.append(0.)
-        tot_uerrs.append(0.)
-
-        energies.append(line[0])
-        energy_lerrs.append(line[1])
-        energy_uerrs.append(line[2])
+            energies.append(fixed_val)
+            energy_lerrs.append(0.)
+            energy_uerrs.append(0.)
 
 
     canv = R.TCanvas()
@@ -103,7 +153,7 @@ def fitGlobalSurrogate(assembly):
     gr.GetYaxis().SetTitleOffset(1.4)
     gr.Draw('AP')
 
-    surrogate = R.TF1("surrogate","[0]*x+[1]-([2]/(x-[3]))",0,60)
+    surrogate = R.TF1("surrogate","[0]*x+[1]-([2]/(x-[3]))",2,60)
     surrogate.SetParName(0,'a')
     surrogate.SetParName(1,'b')
     surrogate.SetParName(2,'c')
@@ -120,18 +170,24 @@ def fitGlobalSurrogate(assembly):
     gr.SetMinimum(0.)
     gr.SetMaximum(surrogate.Eval(65.0))
     canv.Update()
-    canv.SaveAs("plots/KDESurrogateFits/%s_GlobalSurrogateFit.pdf" %assembly)
+    canv.SaveAs("plots/KDESurrogateFits/Global/%s_GlobalSurrogateFit.pdf" %assembly)
 
-    fTh.close()
+    if assembly == "A06-W0110" or assembly == "B06-W0125" or assembly == "C04-W0110" or assembly == "L04-W0125":
+        fTh.close()
     fFe.close()
-    fAm2.close()
-    fAm3.close()
-    fCu.close()
-    fIn.close()
-    fCo1.close()
-    fCo2.close()
+    fAm.close()
+    fCuInXRF.close()
+    fCo.close()
     fCd.close()
-
+    if assembly == "A06-W0110":
+        fCoXRF.close()
+        fCrXRF.close()
+        fCuXRF.close()
+        fFeXRF.close()
+        fMnXRF.close()
+        fNiXRF.close()
+        fTiXRF.close()
+        fVXRF.close()
 
 
 fitGlobalSurrogate(assembly)
