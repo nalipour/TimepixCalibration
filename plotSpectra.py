@@ -106,26 +106,19 @@ def plotSpectra(assembly,topTOT):
     histCuIn_onep.SetLineColor(R.kOrange)
     histCo_onep.SetLineColor(R.kCyan+1)
 
-    leg_allp = R.TLegend(0.7,0.5,0.94,0.89)
-    leg_allp.AddEntry(histFe_allp,"Fe: %i evt" %histFe_allp.GetEntries(),"l")
-    leg_allp.AddEntry(histCo_allp,"Co: %i evt" %histCo_allp.GetEntries(),"l")
-    leg_allp.AddEntry(histCuIn_allp,"CuInXRF: %i evt" %histCuIn_allp.GetEntries(),"l")
-    leg_allp.AddEntry(histCd_allp,"Cd: %i evt" %histCd_allp.GetEntries(),"l")
-    leg_allp.AddEntry(histAm_allp,"Am: %i evt" %histAm_allp.GetEntries(),"l")
-
-    leg_onep = R.TLegend(0.7,0.5,0.94,0.89)
-    leg_onep.AddEntry(histFe_onep,"Fe: %i evt" %histFe_onep.GetEntries(),"l")
-    leg_onep.AddEntry(histCo_onep,"Co: %i evt" %histCo_onep.GetEntries(),"l")
-    leg_onep.AddEntry(histCuIn_onep,"CuInXRF: %i evt" %histCuIn_onep.GetEntries(),"l")
-    leg_onep.AddEntry(histCd_onep,"Cd: %i evt" %histCd_onep.GetEntries(),"l")
-    leg_onep.AddEntry(histAm_onep,"Am: %i evt" %histAm_onep.GetEntries(),"l")
+    leg = R.TLegend(0.6,0.45,0.79,0.89)
+    leg.AddEntry(histAm_allp,"^{241}Am","l")
+    leg.AddEntry(histCd_allp,"^{109}Cd","l")
+    leg.AddEntry(histCo_allp,"^{57}Co","l")
+    leg.AddEntry(histCuIn_allp,"CuInXRF","l")
+    leg.AddEntry(histFe_allp,"^{55}Fe","l")
     
     histFe_allp.Draw()
     histAm_allp.Draw("same")
     histCd_allp.Draw("same")
     histCuIn_allp.Draw("same")
     histCo_allp.Draw("same")
-    leg_allp.Draw()
+    leg.Draw()
     c.Update()
     c.SaveAs("plots/Spectra/%s_Spectra_AllPixels.pdf" %assembly)
 
@@ -134,7 +127,7 @@ def plotSpectra(assembly,topTOT):
     histCd_onep.Draw("same")
     histCuIn_onep.Draw("same")
     histCo_onep.Draw("same")
-    leg_onep.Draw()
+    leg.Draw()
     c.Update()
     c.SaveAs("plots/Spectra/%s_Spectra_OnePixel.pdf" %assembly)
 
@@ -193,7 +186,6 @@ def plotSpectra(assembly,topTOT):
         treeNiXRF.Draw("tot>>histNiXRF_allp","","goff") 
         treeTiXRF.Draw("tot>>histTiXRF_allp","","goff") 
         treeVXRF.Draw("tot>>histVXRF_allp","","goff") 
-        print "drawn histograms with all pixels"
 
         treeCoXRF.Draw("tot>>histCoXRF_onep","col==128&&row==128","goff") 
         treeCrXRF.Draw("tot>>histCrXRF_onep","col==128&&row==128","goff") 
@@ -203,7 +195,6 @@ def plotSpectra(assembly,topTOT):
         treeNiXRF.Draw("tot>>histNiXRF_onep","col==128&&row==128","goff") 
         treeTiXRF.Draw("tot>>histTiXRF_onep","col==128&&row==128","goff") 
         treeVXRF.Draw("tot>>histVXRF_onep","col==128&&row==128","goff") 
-        print "drawn histograms with one pixel"
 
         for hist in [histCoXRF_allp,histCrXRF_allp,histCuXRF_allp,histFeXRF_allp,histMnXRF_allp,
                      histNiXRF_allp,histTiXRF_allp,histVXRF_allp,histCoXRF_onep,histCrXRF_onep,
@@ -233,26 +224,16 @@ def plotSpectra(assembly,topTOT):
         histTiXRF_onep.SetLineColor(R.kGray)
         histVXRF_onep.SetLineColor(R.kBlack)
 
-        leg_allp = R.TLegend(0.7,0.3,0.94,0.89)
-        leg_allp.AddEntry(histCoXRF_allp,"CoXRF: %i evt" %histCoXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histCrXRF_allp,"CrXRF: %i evt" %histCrXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histCuXRF_allp,"CuXRF: %i evt" %histCuXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histFeXRF_allp,"FeXRF: %i evt" %histFeXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histMnXRF_allp,"MnXRF: %i evt" %histMnXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histNiXRF_allp,"NiXRF: %i evt" %histNiXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histTiXRF_allp,"TiXRF: %i evt" %histTiXRF_allp.GetEntries(),"l")
-        leg_allp.AddEntry(histVXRF_allp,"VXRF: %i evt" %histVXRF_allp.GetEntries(),"l")
+        leg = R.TLegend(0.8,0.2,0.94,0.89)
+        leg.AddEntry(histCoXRF_allp,"CoXRF","l")
+        leg.AddEntry(histCrXRF_allp,"CrXRF","l")
+        leg.AddEntry(histCuXRF_allp,"CuXRF","l")
+        leg.AddEntry(histFeXRF_allp,"FeXRF","l")
+        leg.AddEntry(histMnXRF_allp,"MnXRF","l")
+        leg.AddEntry(histNiXRF_allp,"NiXRF","l")
+        leg.AddEntry(histTiXRF_allp,"TiXRF","l")
+        leg.AddEntry(histVXRF_allp,"VXRF","l")
 
-        leg_onep = R.TLegend(0.7,0.3,0.94,0.89)
-        leg_onep.AddEntry(histCoXRF_onep,"CoXRF: %i evt" %histCoXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histCrXRF_onep,"CrXRF: %i evt" %histCrXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histCuXRF_onep,"CuXRF: %i evt" %histCuXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histFeXRF_onep,"FeXRF: %i evt" %histFeXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histMnXRF_onep,"MnXRF: %i evt" %histMnXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histNiXRF_onep,"NiXRF: %i evt" %histNiXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histTiXRF_onep,"TiXRF: %i evt" %histTiXRF_onep.GetEntries(),"l")
-        leg_onep.AddEntry(histVXRF_onep,"VXRF: %i evt" %histVXRF_onep.GetEntries(),"l")
-        
         histCuXRF_allp.Draw()
         histCrXRF_allp.Draw("same")
         histVXRF_allp.Draw("same")
@@ -261,7 +242,7 @@ def plotSpectra(assembly,topTOT):
         histNiXRF_allp.Draw("same")
         histTiXRF_allp.Draw("same")
         histCoXRF_allp.Draw("same")
-        leg_allp.Draw()
+        leg.Draw()
         c.Update()
         c.SaveAs("plots/Spectra/A06-W0110_LNLSSpectra_AllPixels.pdf")
 
@@ -273,7 +254,7 @@ def plotSpectra(assembly,topTOT):
         histNiXRF_onep.Draw("same")
         histTiXRF_onep.Draw("same")
         histCoXRF_onep.Draw("same")
-        leg_onep.Draw()
+        leg.Draw()
         c.Update()
         c.SaveAs("plots/Spectra/A06-W0110_LNLSSpectra_OnePixel.pdf")
 
