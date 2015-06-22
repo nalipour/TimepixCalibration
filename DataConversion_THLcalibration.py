@@ -72,6 +72,7 @@ if __name__ == '__main__':
 
     home = environ['HOME']
     path=home+"/eos/clicdp/data/VertexCalibration/ThresholdScan/"
+    # path="data/"
     directory=path+assembly+"/"
     path=directory+source
     THLstep=2
